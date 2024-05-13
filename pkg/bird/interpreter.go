@@ -137,13 +137,23 @@ func Evaluate(input string) string {
 
 // Interpret prend une chaîne en entrée et interprète le code comme du langage Bird, puis renvoie le résultat.
 // Interpret fonction à jour pour utiliser FunctionMap.
-func Interpret(input string, fm *FunctionMap) (string, error) {
+// Interpret prend une chaîne en entrée et interprète le code comme du langage Bird, puis renvoie le résultat ainsi que des paramètres supplémentaires.
+func Interpret(input string, fm *FunctionMap) (output string, params map[string]string, err error) {
 	expr, err := ParseExpr(input)
 	if err != nil {
-		return "", fmt.Errorf("error parsing expression: %v", err)
+		return "", nil, fmt.Errorf("error parsing expression: %v", err)
 	}
+
+	// Ici, nous supposons que votre FunctionCallExpr ou tout autre logique renvoie également des paramètres
 	if callExpr, ok := expr.(*FunctionCallExpr); ok {
-		return fm.Call(callExpr.Name, callExpr.Args...)
+		result, err := fm.Call(callExpr.Name, callExpr.Args...)
+		if err != nil {
+			return "", nil, err
+		}
+		// Supposons que votre résultat soit un JSON ou une structure que vous pouvez parser pour extraire des paramètres
+		// Ici, nous simulerons cela avec des valeurs hard-coded pour la démonstration.
+		// Votre logique réelle dépendra de la façon dont vous structurez les résultats dans `fm.Call`.
+		return result, map[string]string{"ParamKey": "ParamValue"}, nil
 	}
-	return expr.Evaluate(), nil
+	return expr.Evaluate(), nil, nil
 }

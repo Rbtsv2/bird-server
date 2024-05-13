@@ -8,7 +8,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"text/template"
 )
 
 // RouteConfig stocke les configurations pour une route, y compris le fichier et les paramètres.
@@ -33,30 +32,30 @@ func NewRouteHandler() *RouteHandler {
 func (r *RouteHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	path := req.URL.Path
 	if routeConfig, ok := r.Routes[path]; ok {
-		fullPath := filepath.Join("/var/www/server/template", routeConfig.File)
+		fullPath := filepath.Join("/var/www/bird/template", routeConfig.File)
 		log.Printf("Serving file: %s with params: %s", fullPath, routeConfig.Param)
 
 		// Parse the template file
-		tmpl, err := template.ParseFiles(fullPath)
-		if err != nil {
-			log.Printf("Error parsing template: %v", err)
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-			return
-		}
+		// tmpl, err := template.ParseFiles(fullPath)
+		// if err != nil {
+		// 	log.Printf("Error parsing template: %v", err)
+		// 	http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		// 	return
+		// }
 
-		// Create a data map based on parameters
-		data := map[string]interface{}{}
-		paramParts := strings.Split(routeConfig.Param, "=")
-		if len(paramParts) == 2 {
-			data[paramParts[0]] = paramParts[1]
-		}
+		// // Create a data map based on parameters
+		// data := map[string]interface{}{}
+		// paramParts := strings.Split(routeConfig.Param, "=")
+		// if len(paramParts) == 2 {
+		// 	data[paramParts[0]] = paramParts[1]
+		// }
 
-		// Execute the template with data
-		err = tmpl.Execute(w, data)
-		if err != nil {
-			log.Printf("Error executing template: %v", err)
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		}
+		// // Execute the template with data
+		// err = tmpl.Execute(w, data)
+		// if err != nil {
+		// 	log.Printf("Error executing template: %v", err)
+		// 	http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		// }
 	} else {
 		log.Printf("No route found for path: %s", path)
 		http.Error(w, "Not Found", http.StatusNotFound)

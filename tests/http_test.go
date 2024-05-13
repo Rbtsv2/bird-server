@@ -10,7 +10,7 @@ import (
 
 func TestRouteHandler(t *testing.T) {
 	handler := bird.NewRouteHandler() // Notez l'utilisation de bird. pour accéder à NewRouteHandler
-	err := handler.LoadRoutesFromDirectory("/var/www/server/birdfiles")
+	err := handler.LoadRoutesFromDirectory("/var/www/bird/birdfiles")
 	if err != nil {
 		t.Fatalf("Failed to load routes: %v", err)
 	}

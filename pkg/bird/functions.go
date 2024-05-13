@@ -2,6 +2,7 @@ package bird
 
 import (
 	"fmt"
+	"log"
 )
 
 // FunctionMap est une carte des noms de fonction aux fonctions exécutables.
@@ -20,13 +21,18 @@ func NewFunctionMap() *FunctionMap {
 
 // registerDefaults enregistre les fonctions par défaut.
 func (fm *FunctionMap) registerDefaults() {
+
 	fm.functions["log"] = func(args ...Expr) (string, error) {
+
 		if len(args) < 1 {
 			return "", fmt.Errorf("not enough arguments to log")
 		}
+		log.Printf("Log: %s", args[0].Evaluate()) // Affiche le log dans la console pour le débogage
 		// Simple log implementation that just returns the string representation of the first argument.
 		return args[0].Evaluate(), nil
+
 	}
+
 }
 
 // Call exécute la fonction avec les arguments donnés.
